@@ -194,7 +194,7 @@ bool enrolar(int id) {
     // Crear modelo
     if (finger.createModel() == FINGERPRINT_OK) {
       if (finger.storeModel(id) == FINGERPRINT_OK) {
-        tone(PIN_BUZZER, 2500, 400); 
+         tone(PIN_BUZZER, 2000, 200);
         Serial.println(F("¡Huella guardada con éxito!"));
         return true; // Única forma de salir con éxito
       }
@@ -270,5 +270,6 @@ void borrarTodo() {
   }
 }
 
-void sonidoExito() { tone(PIN_BUZZER, 2000, 200); }
+void sonidoExito() { tone(PIN_BUZZER, 2500, 400); }
+
 void sonidoError() { tone(PIN_BUZZER, 500, 300); delay(100); tone(PIN_BUZZER, 500, 300); }
