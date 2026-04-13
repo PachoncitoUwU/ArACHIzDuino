@@ -42,6 +42,7 @@ void setup() {
   nfc_hardware.SAMConfig();
   finger.begin(57600);
 
+
   EEPROM.get(0, cantidadUsuarios);
   if (cantidadUsuarios > 10 || cantidadUsuarios < 0) cantidadUsuarios = 0;
   for (int i = 0; i < cantidadUsuarios; i++) {
@@ -66,7 +67,7 @@ void loop() {
   uint8_t success;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 }; 
   uint8_t uidLength;
-  success = nfc_hardware.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 50);
+  success = nfc_hardware.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 200);
  if (success) {
     verificarAccesoNFC(hexUID(uid, uidLength));
     delay(1000); 
@@ -76,6 +77,17 @@ void loop() {
 
   // Lectura Huella
   verificarAccesoHuella();
+
+  static int fallos = 0;
+
+success = nfc_hardware.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 200);
+
+static unsigned long ultimoExito = 0;
+const unsigned long TIEMPO_LIMITE = 5000; // 5 segundos
+
+success = nfc_hardware.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 200);
+
+
 }
 
 // --- GESTIÓN DE REGISTRO ---
@@ -269,6 +281,8 @@ void borrarTodo() {
     sonidoExito();
   }
 }
+
+
 
 void sonidoExito() { tone(PIN_BUZZER, 2500, 400); }
 
